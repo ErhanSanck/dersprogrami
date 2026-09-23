@@ -1,0 +1,498 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Özel Ders Programı</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap');
+
+  :root {
+    --bg: #ffffff;
+    --surface: #f5f6fa;
+    --surface-2: #eef0f5;
+    --border: #d1d5db;
+    --text: #1f1f23;
+    --muted: #6b7280;
+    --accent: #6366f1;
+    --accent-2: #818cf8;
+    --danger: #ef4444;
+    --success: #10b981;
+    --warn: #f59e0b;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'Inter', ui-sans-serif, system-ui, -apple-system, Segoe UI, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+  }
+
+  header {
+    position: sticky; top: 0; z-index: 50;
+    backdrop-filter: blur(18px) saturate(140%);
+    background: rgba(255,255,255,0.9);
+    border-bottom: 1px solid var(--border);
+    padding: 28px 24px;
+    text-align: center;
+  }
+  header h1 {
+    font-weight: 800; font-size: 32px; letter-spacing: -1.5px;
+    background: linear-gradient(135deg, #c7d2fe 0%, #818cf8 60%, #6366f1 100%);
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+    margin-bottom: 6px;
+  }
+  header p { color: var(--muted); font-size: 14px; }
+
+  main { max-width: 1280px; margin: 0 auto; padding: 36px 24px 80px; }
+
+  /* Ana Menü */
+  .menu {
+    display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 18px; margin-bottom: 40px;
+  }
+  .menu button {
+    position: relative; overflow: hidden;
+    background: linear-gradient(135deg, rgba(99,102,241,0.12) 0%, rgba(99,102,241,0.05) 100%);
+    border: 1px solid var(--border);
+    border-radius: 18px; padding: 28px 24px; color: var(--text);
+    font-size: 18px; font-weight: 700; letter-spacing: -0.4px;
+    cursor: pointer; transition: all 0.25s ease; text-align: left;
+    box-shadow: inset 0 1px 0 rgba(255,255,255,0.06), 0 10px 30px rgba(0,0,0,0.35);
+  }
+  .menu button:hover {
+    border-color: rgba(99,102,241,0.35);
+    background: linear-gradient(135deg, rgba(99,102,241,0.2) 0%, rgba(99,102,241,0.08) 100%);
+    transform: translateY(-3px);
+    box-shadow: inset 0 1px 0 rgba(255,255,255,0.08), 0 18px 40px rgba(99,102,241,0.15);
+  }
+  .menu button .sub { display: block; font-weight: 400; font-size: 13px; color: var(--muted); margin-top: 6px; }
+
+  /* Kart */
+  .card {
+    background: linear-gradient(180deg, rgba(255,255,255,0.03) 0%, rgba(255,255,255,0.01) 100%);
+    border: 1px solid var(--border); border-radius: 22px;
+    padding: 28px; box-shadow: 0 10px 40px rgba(0,0,0,0.35);
+    margin-bottom: 32px;
+  }
+  .card h2 {
+    font-size: 22px; font-weight: 700; letter-spacing: -0.8px; margin-bottom: 20px;
+    display: flex; align-items: center; gap: 10px;
+  }
+  .card h2 .dot {
+    width: 8px; height: 8px; border-radius: 50%;
+    background: linear-gradient(135deg, #818cf8, #6366f1); box-shadow: 0 0 8px #818cf8aa;
+  }
+
+  /* Form */
+  .form-row { display: flex; gap: 14px; flex-wrap: wrap; align-items: end; }
+  .form-row > div { flex: 1 1 220px; }
+  label { display: block; font-size: 12px; font-weight: 600; letter-spacing: 0.3px; color: var(--muted); margin-bottom: 6px; text-transform: uppercase; }
+  input, select {
+    width: 100%; padding: 14px 16px; border-radius: 12px; border: 1px solid var(--border);
+    background: var(--surface); color: var(--text); font-size: 15px; transition: border-color 0.2s, box-shadow 0.2s;
+  }
+  input:focus, select:focus { border-color: var(--accent); outline: none; box-shadow: 0 0 0 3px rgba(99,102,241,0.15); }
+  button.primary {
+    padding: 14px 28px; border-radius: 12px; border: none;
+    background: linear-gradient(135deg, #6366f1, #818cf8); color: #fff;
+    font-weight: 700; font-size: 15px; cursor: pointer; transition: all 0.2s;
+    box-shadow: 0 6px 20px rgba(99,102,241,0.35);
+  }
+  button.primary:hover { filter: brightness(1.12); transform: translateY(-1px); box-shadow: 0 10px 28px rgba(99,102,241,0.45); }
+
+  /* Öğrenci Kartları */
+  .student-pool {
+    display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 20px;
+  }
+  .student-card {
+    background: linear-gradient(135deg, rgba(255,255,255,0.06), rgba(255,255,255,0.02));
+    border: 1px solid var(--border); border-radius: 14px; padding: 14px 16px;
+    cursor: grab; user-select: none; transition: all 0.2s; box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+  }
+  .student-card:hover { border-color: rgba(99,102,241,0.45); transform: translateY(-2px); box-shadow: 0 8px 20px rgba(99,102,241,0.15); }
+  .student-card .name { font-weight: 700; font-size: 15px; }
+  .student-card .cls { font-size: 12px; color: var(--muted); }
+
+  /* Ders Programı Tablosu */
+  .schedule-wrapper { overflow-x: auto; }
+  table.schedule { width: 100%; border-collapse: separate; border-spacing: 8px; min-width: 720px; }
+  th, td { padding: 10px 10px; text-align: center; }
+  th { font-weight: 700; color: var(--muted); font-size: 12px; letter-spacing: 0.4px; text-transform: uppercase; }
+  td.cell {
+    background: linear-gradient(180deg, rgba(255,255,255,0.03), rgba(255,255,255,0.01));
+    border: 1.5px dashed rgba(255,255,255,0.08);
+    border-radius: 14px; min-height: 90px; vertical-align: top; position: relative;
+    transition: border-color 0.2s, background 0.2s;
+  }
+  td.cell:hover { border-color: rgba(99,102,241,0.35); background: rgba(99,102,241,0.05); }
+  td.cell.filled { border-style: solid; border-color: rgba(99,102,241,0.35); background: rgba(99,102,241,0.08); }
+
+  .slot-item {
+    background: linear-gradient(135deg, #6366f1 0%, #818cf8 100%);
+    color: #fff; padding: 8px 10px; border-radius: 10px; font-size: 13px; font-weight: 600;
+    box-shadow: 0 4px 12px rgba(99,102,241,0.35); cursor: pointer; position: relative;
+  }
+  .slot-item .remove-slot {
+    position: absolute; top: -6px; right: -6px; width: 18px; height: 18px; border-radius: 50%;
+    background: var(--danger); color: #fff; font-size: 11px; line-height: 18px; text-align: center;
+    border: 2px solid var(--surface); cursor: pointer; display: none;
+  }
+  .slot-item:hover .remove-slot { display: block; }
+
+  /* Öğrenci Listesi */
+  .student-table { width: 100%; border-collapse: collapse; }
+  .student-table thead th { text-align: left; padding: 14px 12px; font-size: 12px; text-transform: uppercase; letter-spacing: 0.4px; color: var(--muted); border-bottom: 1px solid var(--border); }
+  .student-table tbody td { padding: 14px 12px; border-bottom: 1px solid rgba(255,255,255,0.04); }
+  .student-table tbody tr { cursor: pointer; user-select: none; }
+  .student-table tbody tr:hover td { background: rgba(255,255,255,0.03); }
+  .student-table .actions { display: flex; gap: 8px; }
+  .student-table button { padding: 8px 14px; border-radius: 8px; border: 1px solid var(--border); background: var(--surface-2); color: var(--text); font-size: 13px; font-weight: 600; cursor: pointer; transition: all 0.2s; }
+  .student-table button:hover { border-color: var(--accent); color: var(--accent-2); }
+  .student-table button.danger:hover { border-color: var(--danger); color: var(--danger); }
+
+  /* Boş durum */
+  .empty-state { color: var(--muted); text-align: center; padding: 28px; }
+
+  /* Responsive */
+  @media (max-width: 640px) {
+    header h1 { font-size: 26px; }
+    main { padding: 20px 16px 60px; }
+    .card { padding: 20px; }
+  }
+</style>
+  <!-- Firebase SDK (kullanıcı config ekleyecek) -->
+  <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-database-compat.js"></script>
+</head>
+<body>
+
+<header>
+  <h1>Özel Ders Programı</h1>
+  <p>Öğrenci yönetimi ve ders programı düzenleme paneli</p>
+</header>
+
+<main>
+  <!-- Öğrenci Ekle -->
+  <section id="ekle" class="card" style="display:none;">
+    <nav style="display:flex; gap:10px; margin-bottom:20px; flex-wrap:wrap;">
+      <button onclick="showSection('ekle')" style="flex:1; padding:10px 14px; border-radius:10px; border:1px solid var(--border); background:var(--accent); color:#fff; font-weight:700; font-size:13px; cursor:pointer;">Öğrenci Ekle</button>
+      <button onclick="showSection('program')" style="flex:1; padding:10px 14px; border-radius:10px; border:1px solid var(--border); background:var(--surface); color:var(--text); font-weight:600; font-size:13px; cursor:pointer;">Ders Programı</button>
+      <button onclick="showSection('liste')" style="flex:1; padding:10px 14px; border-radius:10px; border:1px solid var(--border); background:var(--surface); color:var(--text); font-weight:600; font-size:13px; cursor:pointer;">Öğrenci Listesi</button>
+    </nav>
+    <h2><span class="dot"></span> Öğrenci Ekle</h2>
+    <form id="formOgrenci" onsubmit="kaydetOgrenci(event)">
+      <div class="form-row">
+        <div>
+          <label for="adSoyad">Ad Soyad</label>
+          <input type="text" id="adSoyad" placeholder="Örn: Ahmet Yılmaz" required>
+        </div>
+        <div>
+          <label for="sinif">Sınıf</label>
+          <select id="sinif" required>
+            <option value="">Sınıf seçin</option>
+            <option>5. Sınıf</option>
+            <option>6. Sınıf</option>
+            <option>7. Sınıf</option>
+            <option>8. Sınıf</option>
+            <option>9. Sınıf</option>
+            <option>10. Sınıf</option>
+            <option>11. Sınıf</option>
+            <option>12. Sınıf</option>
+          </select>
+        </div>
+      </div>
+      <div style="margin-top:20px;">
+        <button type="submit" class="primary">Kaydet</button>
+      </div>
+    </form>
+  </section>
+
+  <!-- Ders Programı Düzenle -->
+  <section id="program" class="card" style="display:none;">
+    <nav style="display:flex; gap:10px; margin-bottom:20px; flex-wrap:wrap;">
+      <button onclick="showSection('ekle')" style="flex:1; padding:10px 14px; border-radius:10px; border:1px solid var(--border); background:var(--surface); color:var(--text); font-weight:600; font-size:13px; cursor:pointer;">Öğrenci Ekle</button>
+      <button onclick="showSection('program')" style="flex:1; padding:10px 14px; border-radius:10px; border:1px solid var(--border); background:var(--accent); color:#fff; font-weight:700; font-size:13px; cursor:pointer;">Ders Programı</button>
+      <button onclick="showSection('liste')" style="flex:1; padding:10px 14px; border-radius:10px; border:1px solid var(--border); background:var(--surface); color:var(--text); font-weight:600; font-size:13px; cursor:pointer;">Öğrenci Listesi</button>
+    </nav>
+    <h2><span class="dot"></span> Ders Programı Düzenle</h2>
+
+    <h3 style="font-size:15px; font-weight:700; margin-bottom:10px; color: var(--text);">Öğrenciler (Sürükle-bırak)</h3>
+    <div class="student-pool" id="ogrenciHavuzu"></div>
+
+    <div class="schedule-wrapper">
+      <table class="schedule" id="programTablo">
+        <thead>
+          <tr>
+            <th>Gün</th>
+            <th>12:00 - 12:40</th><th>12:50 - 13:30</th><th>13:40 - 14:20</th>
+            <th>14:30 - 15:10</th><th>15:20 - 16:00</th><th>16:10 - 16:50</th>
+            <th>17:00 - 17:40</th><th>17:50 - 18:30</th>
+          </tr>
+        </thead>
+        <tbody id="programGuncelle"></tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- Öğrenci Listesi -->
+  <section id="liste" class="card" style="display:none;">
+    <nav style="display:flex; gap:10px; margin-bottom:20px; flex-wrap:wrap;">
+      <button onclick="showSection('ekle')" style="flex:1; padding:10px 14px; border-radius:10px; border:1px solid var(--border); background:var(--surface); color:var(--text); font-weight:600; font-size:13px; cursor:pointer;">Öğrenci Ekle</button>
+      <button onclick="showSection('program')" style="flex:1; padding:10px 14px; border-radius:10px; border:1px solid var(--border); background:var(--surface); color:var(--text); font-weight:600; font-size:13px; cursor:pointer;">Ders Programı</button>
+      <button onclick="showSection('liste')" style="flex:1; padding:10px 14px; border-radius:10px; border:1px solid var(--border); background:var(--accent); color:#fff; font-weight:700; font-size:13px; cursor:pointer;">Öğrenci Listesi</button>
+    </nav>
+    <h2><span class="dot"></span> Öğrenci Listesi</h2>
+    <div id="ogrenciTabloAlani">
+      <div id="ogrenciDetayAlani" style="margin-top:16px;"></div>
+    <table class="student-table" id="ogrenciTablosu">
+        <thead>
+          <tr><th>Ad Soyad</th><th>Sınıf</th><th>İşlemler</th></tr>
+        </thead>
+        <tbody id="ogrenciTabloGuncelle"></tbody>
+      </table>
+      <p id="listeBos" class="empty-state">Henüz kayıtlı öğrenci bulunmuyor.</p>
+    </div>
+  </section>
+
+</main>
+
+<!-- Düzenle Modal -->
+<div id="duzenleModal" style="display:none; position:fixed; inset:0; z-index:100; background:rgba(0,0,0,0.7); backdrop-filter:blur(8px); align-items:center; justify-content:center; padding:20px;">
+  <div style="background:var(--surface); border:1px solid var(--border); border-radius:20px; padding:28px; width:100%; max-width:420px; box-shadow:0 20px 60px rgba(0,0,0,0.6);">
+    <h3 style="font-size:20px; font-weight:700; margin-bottom:18px;">Öğrenci Düzenle</h3>
+    <form onsubmit="guncelleOgrenci(event)">
+      <input type="hidden" id="duzenleId">
+      <div style="margin-bottom:14px;">
+        <label for="duzenleAd">Ad Soyad</label>
+        <input type="text" id="duzenleAd" required>
+      </div>
+      <div style="margin-bottom:20px;">
+        <label for="duzenleSinif">Sınıf</label>
+        <select id="duzenleSinif" required>
+          <option>5. Sınıf</option><option>6. Sınıf</option><option>7. Sınıf</option><option>8. Sınıf</option>
+          <option>9. Sınıf</option><option>10. Sınıf</option><option>11. Sınıf</option><option>12. Sınıf</option>
+        </select>
+      </div>
+      <div style="display:flex; gap:10px;">
+        <button type="submit" class="primary" style="flex:1;">Kaydet</button>
+        <button type="button" onclick="kapatModal()" style="flex:1; padding:14px; border-radius:12px; border:1px solid var(--border); background:var(--surface-2); color:var(--text); font-weight:700; cursor:pointer;">İptal</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<script>
+  // Firebase Config - AŞAĞIDAKİ BİLGİLERİ KENDİNİZ DOLDURUN
+  const firebaseConfig = {
+   apiKey: "AIzaSyA8XQsJxy9dLXEUqMIRvIJo6xY7ccriJUs",
+  authDomain: "dersprog-76583.firebaseapp.com",
+  databaseURL: "https://dersprog-76583-default-rtdb.firebaseio.com",
+  projectId: "dersprog-76583",
+  storageBucket: "dersprog-76583.firebasestorage.app",
+  messagingSenderId: "119598409588",
+  appId: "1:119598409588:web:12f395c69248f952926e21",
+  measurementId: "G-C3KXNPHKMP"
+  };
+
+  // Firebase başlat (config doluysa)
+  let db = null;
+  try {
+    firebase.initializeApp(firebaseConfig);
+    db = firebase.database();
+  } catch (e) {
+    console.warn("Firebase başlatılamadı. Lütfen firebaseConfig bilgilerini doldurun.");
+  }
+
+  // Veri
+  let ogrenciler = JSON.parse(localStorage.getItem('dersOgrenciler') || '[]');
+  let program = JSON.parse(localStorage.getItem('dersProgram') || '{}');
+
+  const saatler = ['12:00 - 12:40', '12:50 - 13:30', '13:40 - 14:20', '14:30 - 15:10', '15:20 - 16:00', '16:10 - 16:50', '17:00 - 17:40', '17:50 - 18:30'];
+  const gunler = ['Pazartesi', 'Salı', 'Çarşamba', 'Perşembe', 'Cuma', 'Cumartesi', 'Pazar'];
+
+  // Yardımcı
+  function guvenliKaydet() {
+    localStorage.setItem('dersOgrenciler', JSON.stringify(ogrenciler));
+    localStorage.setItem('dersProgram', JSON.stringify(program));
+    // Firebase bağlantısı aktifse bilgileri sunucuya yaz
+    if (db) {
+      try {
+        db.ref('ogrenciler').set(ogrenciler);
+        db.ref('program').set(program);
+      } catch (e) {
+        console.error("Firebase yazma hatası:", e);
+      }
+    }
+  }
+
+  // Menü
+  function showSection(id) {
+    document.querySelectorAll('section.card').forEach(s => s.style.display = 'none');
+    const el = document.getElementById(id);
+    if (el) { el.style.display = 'block'; window.scrollTo({ top: 0, behavior: 'smooth' }); }
+    if (id === 'program') { renderProgram(); renderStudentPool(); }
+    if (id === 'liste') { renderListe(); }
+  }
+
+  // Öğrenci Ekle
+  function kaydetOgrenci(e) {
+    e.preventDefault();
+    const ad = document.getElementById('adSoyad').value.trim();
+    const sinif = document.getElementById('sinif').value.trim();
+    if (!ad || !sinif) return;
+    ogrenciler.push({ id: Date.now().toString(), ad, sinif });
+    guvenliKaydet();
+    document.getElementById('formOgrenci').reset();
+    alert('Öğrenci başarıyla kaydedildi.');
+  }
+
+  // Öğrenci Havuzu
+  function renderStudentPool() {
+    const havuz = document.getElementById('ogrenciHavuzu');
+    if (!ogrenciler.length) { havuz.innerHTML = '<p class="empty-state">Henüz öğrenci yok. Önce öğrenci ekleyin.</p>'; return; }
+    havuz.innerHTML = ogrenciler.map(o => `
+      <div class="student-card" draggable="true" ondragstart="dragStart(event)" data-id="${o.id}">
+        <div class="name">${escapeHtml(o.ad)}</div>
+        <div class="cls">${escapeHtml(o.sinif)}</div>
+      </div>
+    `).join('');
+  }
+
+  // Sürükle-Bırak
+  function dragStart(e) {
+    e.dataTransfer.setData('text/plain', e.target.getAttribute('data-id'));
+    e.dataTransfer.effectAllowed = 'move';
+  }
+  function dragOver(e) { e.preventDefault(); e.dataTransfer.dropEffect = 'move'; }
+  function dropOnCell(e) {
+    e.preventDefault();
+    const id = e.dataTransfer.getData('text/plain');
+    const ogr = ogrenciler.find(o => o.id == id); if (!ogr) return;
+    const key = e.currentTarget.getAttribute('data-key'); // gün-saat
+    // Kaldır öncekini
+    for (const k in program) {
+      if (program[k].id == id) delete program[k];
+    }
+    program[key] = { id: ogr.id, ad: ogr.ad, sinif: ogr.sinif };
+    guvenliKaydet();
+    renderProgram();
+  }
+
+  // Program Tablosu
+  function renderProgram() {
+    renderStudentPool();
+    const tbody = document.getElementById('programGuncelle');
+    let html = '';
+    gunler.forEach((gun, gi) => {
+      html += `<tr>`;
+      html += `<th style="text-align:left; min-width:140px; vertical-align:middle; font-weight:700; color:var(--text);">${gun}</th>`;
+      saatler.forEach((saat, si) => {
+        const key = `${gun}-${si}`;
+        const item = program[key];
+        html += `<td class="cell ${item ? 'filled' : ''}" data-key="${key}" ondragover="dragOver(event)" ondrop="dropOnCell(event)">`;
+        if (item) {
+          html += `<div class="slot-item" onclick="silSlot('${key}')">${escapeHtml(item.ad)} <span class="remove-slot" onclick="event.stopPropagation(); silSlot('${key}')">×</span></div>`;
+        }
+        html += `</td>`;
+      });
+      html += `</tr>`;
+    });
+    tbody.innerHTML = html;
+  }
+  function silSlot(key) {
+    delete program[key];
+    guvenliKaydet();
+    renderProgram();
+  }
+
+  // Öğrenci Listesi
+  function renderListe() {
+    const tbody = document.getElementById('ogrenciTabloGuncelle');
+    const bos = document.getElementById('listeBos');
+    if (!ogrenciler.length) { tbody.innerHTML = ''; bos.style.display = 'block'; return; }
+    bos.style.display = 'none';
+    tbody.innerHTML = ogrenciler.map(o => `
+      <tr onclick="detayGoster('${o.id}', this)">
+        <td><strong>${escapeHtml(o.ad)}</strong></td>
+        <td>${escapeHtml(o.sinif)}</td>
+        <td class="actions">
+          <button onclick="event.stopPropagation(); duzenleModal('${o.id}')">Düzenle</button>
+          <button class="danger" onclick="event.stopPropagation(); silOgrenci('${o.id}')">Sil</button>
+        </td>
+      </tr>
+    `).join('');
+  }
+
+  function silOgrenci(id) {
+    if (!confirm('Bu öğrenciyi silmek istediğinize emin misiniz?')) return;
+    ogrenciler = ogrenciler.filter(o => o.id != id);
+    // Programdan da kaldır
+    for (const k in program) { if (program[k].id == id) delete program[k]; }
+    guvenliKaydet();
+    renderListe(); renderProgram();
+  }
+
+  // Düzenle Modal
+  function duzenleModal(id) {
+    const o = ogrenciler.find(x => x.id == id); if (!o) return;
+    document.getElementById('duzenleId').value = o.id;
+    document.getElementById('duzenleAd').value = o.ad;
+    document.getElementById('duzenleSinif').value = o.sinif;
+    document.getElementById('duzenleModal').style.display = 'flex';
+  }
+  function kapatModal() { document.getElementById('duzenleModal').style.display = 'none'; }
+  function guncelleOgrenci(e) {
+    e.preventDefault();
+    const id = document.getElementById('duzenleId').value;
+    const ad = document.getElementById('duzenleAd').value.trim();
+    const sinif = document.getElementById('duzenleSinif').value.trim();
+    const o = ogrenciler.find(x => x.id == id); if (!o) return;
+    o.ad = ad; o.sinif = sinif;
+    // Programdaki adı da güncelle
+    for (const k in program) { if (program[k].id == id) { program[k].ad = ad; program[k].sinif = sinif; } }
+    guvenliKaydet();
+    kapatModal();
+    renderListe(); renderProgram();
+    alert('Öğrenci güncellendi.');
+  }
+
+  function detayGoster(id, el) {
+    const ogr = ogrenciler.find(o => o.id == id); if (!ogr) return;
+    const dersler = [];
+    for (const k in program) {
+      if (program[k].id == id) {
+        const [gun, si] = k.split('-');
+        dersler.push({ gun: gun, saat: saatler[parseInt(si)] || k });
+      }
+    }
+    const alan = document.getElementById('ogrenciDetayAlani');
+    if (dersler.length === 0) {
+      alan.innerHTML = `<div style="padding:16px; background:var(--surface); border:1px solid var(--border); border-radius:14px; color:var(--muted); font-size:14px;">${escapeHtml(ogr.ad)} için kayıtlı ders bulunmuyor.</div>`;
+    } else {
+      let html = `<div style="padding:16px; background:linear-gradient(135deg, rgba(99,102,241,0.08), rgba(129,140,248,0.06)); border:1px solid var(--border); border-radius:14px;">`;
+      html += `<h4 style="font-weight:700; margin-bottom:10px; color:var(--text);">${escapeHtml(ogr.ad)} — Ders Aldığı Tarihler</h4>`;
+      html += `<table style="width:100%; border-collapse:collapse; font-size:14px;">`;
+      html += `<thead><tr style="border-bottom:1px solid var(--border);"><th style="text-align:left; padding:8px 6px;">Gün</th><th style="text-align:left; padding:8px 6px;">Saat</th></tr></thead>`;
+      html += `<tbody>`;
+      dersler.sort((a,b) => gunler.indexOf(a.gun) - gunler.indexOf(b.gun)).forEach(d => {
+        html += `<tr><td style="padding:8px 6px; color:var(--text);">${d.gun}</td><td style="padding:8px 6px; color:var(--muted);">${d.saat}</td></tr>`;
+      });
+      html += `</tbody></table></div>`;
+      alan.innerHTML = html;
+    }
+  }
+
+  function escapeHtml(text) {
+    const div = document.createElement('div');
+    div.textContent = text; return div.innerHTML;
+  }
+
+  // Başlangıç
+  document.addEventListener('DOMContentLoaded', () => {
+    showSection('program'); // Varsayılan olarak program açık
+  });
+</script>
+</body>
+</html>
